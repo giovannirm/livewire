@@ -66,7 +66,7 @@ class DuplicateShowPosts extends Component
         'image' => 'imagen',
     ];
 
-    protected $listeners = ['render'];
+    protected $listeners = ['render', 'delete'];
 
     public function updated($propertyName)
     {
@@ -132,5 +132,10 @@ class DuplicateShowPosts extends Component
     public function loadPosts()
     {
         $this->readyToLoad = true;
+    }
+
+    public function delete(Post $post)
+    {
+        $post->delete();
     }
 }

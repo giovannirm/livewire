@@ -110,9 +110,13 @@
                                         {{ $item->content }}
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-sm font-medium">
+                                <td class="px-6 py-4 text-sm font-medium flex">
                                     <a class="btn btn-green" wire:click="edit({{ $item }})">
                                         <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <a class="btn btn-red ml-2" wire:click="$emit('deletePost', {{ $item->id }})">
+                                        <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -185,5 +189,35 @@
             </x-jet-danger-button>
         </x-slot>
 
-    </x-jet-dialog-modal>    
+    </x-jet-dialog-modal>
+
+    @push('js')
+        <script src="sweetalert2.all.min.js"></script>
+        <script>
+            Livewire.on('deletePost', postId => {
+                Swal.fire({
+                    title: 'Estás segur@?',
+                    text: "¡No podrás revertir esto!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, borrar esto!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        
+                        Livewire.emitTo('duplicate-show-posts', 'delete', postId);
+
+                        Swal.fire(
+                            'Borrado!',
+                            'Tu archivo ha sido eliminado',
+                            'success'
+                        )
+                    }
+                });
+            });
+
+        </script>
+    @endpush
+
 </div>
